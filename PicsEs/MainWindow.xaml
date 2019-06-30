@@ -1,0 +1,61 @@
+﻿<Window x:Class="PicsEs.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PicsEs"
+		xmlns:vm="clr-namespace:PicsEs.ViewModels"
+        mc:Ignorable="d"
+        Title="PicsEs" Height="350" Width="525" MinHeight="350" MinWidth="525">
+	<Window.DataContext>
+		<vm:MainWindowViewModel/>
+	</Window.DataContext>
+	<Window.Resources>
+		<Style TargetType="Button">
+			<Setter Property="Padding" Value="10"/>
+		</Style>
+	</Window.Resources>
+    <DockPanel>
+		
+		<DockPanel DockPanel.Dock="Top">
+			<StackPanel DockPanel.Dock="Left">
+				<Button Content="SelectFiles" Command="{Binding SelectFilesCommand}"/>
+				<Button Content="SelectFolder" Command="{Binding SelectFolderCommand}"/>
+			</StackPanel>
+			<Grid >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Button Grid.Column="0" Content="Convert Selected" Command="{Binding ConvertCommand}" CommandParameter="{Binding SelectedItems, ElementName=listbox}"/>
+				<Button Grid.Column="1" Content="Convert All Images" Command="{Binding ConvertAllCommand}" />
+			</Grid>
+			
+		</DockPanel>
+		<Grid DockPanel.Dock="Bottom" Height="20">
+			<ProgressBar  IsIndeterminate="{Binding IsBusy}" />
+			<TextBlock TextAlignment="Left" Margin="3">
+				<TextBlock.Text>
+					<MultiBinding StringFormat="{}{0} out of {1} completed">
+						<Binding Path="CompletedFiles"/>
+						<Binding Path="NumOfFiles"/>
+					</MultiBinding>
+				</TextBlock.Text>
+               
+            </TextBlock>
+            <TextBlock TextAlignment="Right" Margin="3">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} out of {1} skipped">
+                        <Binding Path="SkippedFiles"/>
+                        <Binding Path="NumOfFiles"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+           
+        </Grid>
+		
+		<ListView x:Name="listbox" ItemsSource="{Binding Files}" SelectionMode="Multiple">
+			
+		</ListView>
+	</DockPanel>
+</Window>
